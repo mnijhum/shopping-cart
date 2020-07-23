@@ -25,12 +25,12 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="iminusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="iphoneInput" type="text" class="form-control text-center" value="1">
+                           <button id="iplusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="iphonePrice">1219</span></h5>
+                        <img id="iphoneCross" src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
                </div>
@@ -43,13 +43,13 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button id="coverMinusBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="coverInput" type="text" class="form-control text-center" value="1">
+                           <button id="coverPlusBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$59</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="coverPrice">59</span></h5>
+                        <img id="coverCross" src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
                </div>
@@ -64,9 +64,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$ <span id="subTotal">1278</span></h5>
+                        <h5>$ <span id="tax">0</span></h5>
+                        <h5>$ <span id="total">1278</span></h5>
                      </div>
                   </div>
                </div>
@@ -77,6 +77,122 @@
          </div>
       </div>
    </section>
+   <script>
+
+      // iphone plus button part
+      const iphonePlusBtn = document.getElementById('iplusBtn');
+      iphonePlusBtn.addEventListener("click", function(){
+         var iphnInput = document.getElementById('iphoneInput').value;
+         iphnInput = parseFloat(iphnInput);
+         iphnInput++;
+         document.getElementById('iphoneInput').value=iphnInput;
+         updatePrice('iphonePrice','iplusBtn',1219,iphnInput);
+
+      })
+      //iphone minus button part
+      const iphoneMinusBtn = document.getElementById('iminusBtn');
+      iphoneMinusBtn.addEventListener("click", function(){
+         var iphnInput = document.getElementById('iphoneInput').value;
+         iphnInput = parseFloat(iphnInput);
+         iphnInput--;
+         if(iphnInput>=0){
+            document.getElementById('iphoneInput').value=iphnInput;
+         }
+         updatePrice('iphonePrice','iminusBtn',-1219,iphnInput);
+
+      })
+
+      //cover plus button part
+      const coverPlusBtn = document.getElementById('coverPlusBtn');
+      coverPlusBtn.addEventListener("click", function(){
+         var coverInput = document.getElementById('coverInput').value;
+         coverInput = parseFloat(coverInput);
+         coverInput++;
+         document.getElementById('coverInput').value=coverInput;
+         updatePrice('coverPrice','coverPlusBtn',59,coverInput);
+
+      })
+
+      //cover minus button part
+      const coverMinusBtn = document.getElementById('coverMinusBtn');
+      coverMinusBtn.addEventListener("click", function(){
+         var coverInput = document.getElementById('coverInput').value;
+         coverInput = parseFloat(coverInput);
+         coverInput--;
+         if(coverInput>=0){
+            document.getElementById('coverInput').value=coverInput;
+         }
+         updatePrice('coverPrice','coverMinusBtn',-59,coverInput);
+
+      })
+
+      function updatePrice(id,id2,price,unit){
+         
+         if(unit>=0){
+            const oldPrice = document.getElementById(id).innerText;
+            const oldPriceNum = parseFloat(oldPrice);
+            const newPrice= oldPriceNum+price;
+         document.getElementById(id).innerText=newPrice;
+         var tax=0;
+         if(unit>0)
+         {
+            if(id==='iphonePrice')
+            {
+               if(id2==='iplusBtn')
+               {
+                  tax=10;
+               }
+               else if(id2==='iminusBtn'){
+                  tax=-10;
+               }
+            }
+            else{
+               if(id2==='coverPlusBtn'){
+                  tax=5;
+               }
+               else if(id2==='coverMinusBtn'){
+                  tax=-5;
+               }
+               
+            }
+         }
+
+         
+         
+         updateTotalPrice(tax);
+         
+         }
+      }
+
+      function updateTotalPrice(tax){
+
+         var iphonePrice = document.getElementById('iphonePrice').innerText;
+         iphonePrice = parseFloat(iphonePrice);
+
+         var coverPrice = document.getElementById('coverPrice').innerText;
+         coverPrice = parseFloat(coverPrice);
+
+         var  subtotal=(iphonePrice+coverPrice);
+         document.getElementById('subTotal').innerText=subtotal;
+
+         var total = document.getElementById('total').innerText;
+         total = parseFloat(total);
+
+         var prevTax = document.getElementById('tax').innerText;
+         prevTax = parseFloat(prevTax);
+         var totalTax = prevTax+tax;
+         document.getElementById('tax').innerText=totalTax;
+         var allTotal = subtotal+totalTax;
+         
+         document.getElementById('total').innerText=allTotal;
+      }
+
+      if('iphoneInput'==='0' && 'coverInput'==='0'){
+         document.getElementById('tax').innerText=0;
+      }
+
+      
+   </script>
 </body>
 
 </html>
